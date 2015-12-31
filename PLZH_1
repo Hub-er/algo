@@ -1,0 +1,83 @@
+
+//打印排列
+void print_pl()
+{
+	for (int j = 0; j < K; ++j)
+		printf("%d", g_arr[j]);
+	printf("\n");
+
+	total++;
+}
+
+//排列
+void pl_i(int count, int* idx)
+{
+	if (K == count)		print_pl();
+
+	int t_idx[K];
+	memcpy(t_idx, idx, K*sizeof(int));
+
+	for (int j = 0; j < K; ++j)
+	{
+		if (t_idx[j] == 1)	continue;
+
+		g_arr[count] = t_arr[j];
+		t_idx[j] = 1;
+		pl_i(count + 1, t_idx);
+
+		//重置 important!
+		memcpy(t_idx, idx, K*sizeof(int));
+	}
+}
+
+void PL()
+{
+	/*for (int j = 0; j < K; ++j)
+		printf("%d", t_arr[j]);
+	printf("\n");
+
+	total++;*/
+
+	//对k个数做排列
+	int t_idx[K] = { 0 };		//指示器
+	int count = 0;			//计数
+	for (int i = 0; i < K; ++i)
+	{
+		t_idx[i] = 1;
+		g_arr[count] = t_arr[i];
+		pl_i(count + 1, t_idx);
+
+		memset(t_idx, 0, sizeof(int) * K);
+	}
+
+}
+
+void ZH(int begin, int idx)
+{
+	int num = sizeof(arr) / sizeof(int);
+
+	if (idx == K)				PL();
+	for (int i = begin; i < num; ++i)
+	{
+		t_arr[idx] = arr[i];
+		ZH(i + 1, idx + 1);
+	}
+}
+
+
+//
+//排列组合算法
+#define		K	  3
+int arr[] = { 1, 2, 3, 4};
+int *t_arr = new int[K];
+int *g_arr = new int[K];
+int total = 0;
+
+int main()
+{
+  //从N中任意取出k个数
+	total = 0;
+	ZH(0, 0);	
+
+	printf("\n总数：%d", total);
+}
